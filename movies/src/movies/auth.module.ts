@@ -1,29 +1,13 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtModule } from '@nestjs/jwt';
-import { ThrottlerGuard } from '@nestjs/throttler';
-import { UsersModule } from '../users/users.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { jwtConstants } from './constants';
+import { MovieController } from './movies.controller';
+import { MovieService } from './movies.service';
+import { Movie } from './entities/movie.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [
-    UsersModule,
-    JwtModule.register({
-      global: true,
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [
-    AuthService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
-  exports: [AuthService],
+  imports: [HttpModule, MoviesModule, TypeOrmModule.forFeature([Movie])],
+  controllers: [MovieController],
+  providers: [MovieService],
 })
-export class AuthModule {}
+export class MoviesModule {}
