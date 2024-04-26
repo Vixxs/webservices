@@ -5,6 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './config/typeorm';
 import { MoviesModule } from './movies/movies.module';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+
+export class ConfigSearch {
+  public static searchConfig(url: string): any {
+    return {
+      node: url,
+      maxRetries: 5,
+      requestTimeout: 60000,
+      sniffOnStart: true,
+    };
+  }
+}
 
 @Module({
   imports: [
@@ -20,6 +32,7 @@ import { AppController } from './app.controller';
     }),
     HttpModule,
     MoviesModule,
+    ConfigModule,
   ],
   controllers: [AppController],
 })

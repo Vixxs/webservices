@@ -14,7 +14,6 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
-
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
   ) {}
@@ -96,5 +95,13 @@ export class MovieService {
     }
 
     await this.movieRepository.delete(id);
+  }
+
+  async searchMovie(title: string) {
+    return await this.movieRepository
+      .createQueryBuilder('movie')
+      .where('movie.title ILIKE :title', { title: `%${title}%` })
+      .orWhere('movie.description ILIKE :title', { title: `%${title}%` })
+      .getMany();
   }
 }
