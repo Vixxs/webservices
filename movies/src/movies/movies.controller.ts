@@ -10,14 +10,17 @@ import {
 import { MovieService } from './movies.service';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('movies')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get()
-  async getAllMovies(): Promise<Movie[]> {
-    return await this.movieService.getAllMovies();
+  async getAllMovies(
+    @Paginate() query: PaginateQuery,
+  ): Promise<Paginated<Movie>> {
+    return await this.movieService.getAllMovies(query);
   }
 
   @Get(':id')

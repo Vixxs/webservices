@@ -12,14 +12,17 @@ import { CategoryService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 import { Movie } from './entities/movie.entity';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  async getAllCategories(): Promise<Category[]> {
-    return await this.categoryService.getAllCategories();
+  async getAllCategories(
+    @Paginate() query: PaginateQuery,
+  ): Promise<Paginated<Category>> {
+    return await this.categoryService.getAllCategories(query);
   }
 
   @Get(':id')
