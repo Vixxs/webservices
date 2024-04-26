@@ -1,12 +1,10 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthGuard } from './auth/auth.guard';
-import { AuthModule } from './auth/auth.module';
 import { config } from './config/typeorm';
-import { UsersModule } from './users/users.module';
+import { MoviesModule } from './movies/movies.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -18,14 +16,8 @@ import { UsersModule } from './users/users.module';
       },
     ]),
     HttpModule,
-    UsersModule,
-    AuthModule,
+    MoviesModule,
   ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
+  controllers: [AppController],
 })
 export class AppModule {}

@@ -1,83 +1,46 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { LoginOutputDto } from './dto/login-output.dto';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
-
-export type UserWithToken = User & { access_token: string };
+import { Movie } from './entities/movie.entity';
+import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
 
 @Injectable()
-export class AuthService {
+export class MovieService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-    private jwtService: JwtService,
+    @InjectRepository(Movie)
+    private readonly movieRepository: Repository<Movie>,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<User> {
-    const user = await this.usersRepository.findOneBy({
-      email: registerDto.email,
-    });
-    if (user) {
-      throw new BadRequestException('Email already exists');
-    }
-    registerDto.password = await bcrypt.hash(registerDto.password, 10);
-    await this.usersRepository.save({
-      ...registerDto,
-    });
-    const registeredUser = await this.usersRepository.findOneBy({
-      email: registerDto.email,
-    });
-    if (!registeredUser) {
-      throw new InternalServerErrorException(
-        `User with email ${registerDto.email} was not created`,
-      );
-    }
-
-    return registeredUser;
+  async getAllMovies(): Promise<Movie[]> {
+    return await this.movieRepository.find();
   }
 
-  async login(loginDto: LoginDto): Promise<LoginOutputDto> {
-    const user = await this.usersRepository.findOneBy({
-      email: loginDto.email,
-    });
-    if (!user) {
-      throw new NotFoundException('User not found');
+  async getMovieById(id: number): Promise<Movie> {
+    const movie = await this.movieRepository.findOne({ where: { id } });
+    if (!movie) {
+      throw new NotFoundException(`Movie with ID ${id} not found`);
     }
-    if (!bcrypt.compareSync(loginDto.password, user.password)) {
-      throw new BadRequestException('Invalid password');
-    }
-    return {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      accessToken: this.jwtService.sign({
-        id: user.id,
-        email: user.email,
-      }),
-    };
+    return movie;
   }
 
-  async refreshToken(user: User): Promise<LoginOutputDto> {
-    return {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      accessToken: this.jwtService.sign({
-        id: user.id,
-        email: user.email,
-      }),
-    };
+  async createMovie(createMovieDto: CreateMovieDto): Promise<Movie> {
+    const newMovie = this.movieRepository.create(createMovieDto);
+    return await this.movieRepository.save(newMovie);
+  }
+
+  async updateMovie(
+    id: number,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<Movie> {
+    const movie = await this.getMovieById(id);
+    Object.assign(movie, updateMovieDto);
+    return await this.movieRepository.save(movie);
+  }
+
+  async deleteMovie(id: number): Promise<void> {
+    const result = await this.movieRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Movie with ID ${id} not found`);
+    }
   }
 }
