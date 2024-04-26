@@ -14,14 +14,27 @@ services:
     ports:
       - '5432:5432'
 
-  api:
+  auth:
     build:
-      context: .
+      context: ./auth
       dockerfile: Dockerfile
-    container_name: nest
+    container_name: auth
     ports:
       - '3000:3000'
     depends_on:
       - db
+    volumes:
+      - ./src:/app/src
+
+  movies:
+    build:
+      context: ./movies
+      dockerfile: Dockerfile
+    container_name: movies
+    ports:
+      - '3001:3001'
+    depends_on:
+      - db
+      - auth
     volumes:
       - ./src:/app/src
