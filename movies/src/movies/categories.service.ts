@@ -1,16 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Category } from './entities/category.entity';
-import { Movie } from './entities/movie.entity';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
-import {paginate, Paginated, PaginateQuery} from "nestjs-paginate";
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {Category} from './entities/category.entity';
+import {Movie} from './entities/movie.entity';
+import {CreateCategoryDto, UpdateCategoryDto} from './dto/category.dto';
+import {paginate, Paginated, PaginateQuery} from 'nestjs-paginate';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Movie)
+    private readonly movieRepository: Repository<Movie>,
   ) {}
 
   async getAllCategories(query: PaginateQuery): Promise<Paginated<Category>> {
@@ -21,7 +23,9 @@ export class CategoryService {
   }
 
   async getCategoryById(id: number): Promise<Category> {
-    const category = await this.categoryRepository.findOne({ where: { id } });
+    const category = await this.categoryRepository.findOne({
+      where: { id },
+    });
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
@@ -56,6 +60,8 @@ export class CategoryService {
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
-    return category.movies; // Retourne les films associés à cette catégorie
+      return await this.movieRepository.find({
+        where: {categories: category},
+    });
   }
 }

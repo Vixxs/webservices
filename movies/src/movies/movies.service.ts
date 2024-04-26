@@ -26,7 +26,6 @@ export class MovieService {
       defaultLimit: 5,
     });
   }
-
   async getMovieById(id: number): Promise<Movie> {
     const movie = await this.movieRepository.findOne({
       where: { id },

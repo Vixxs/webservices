@@ -6,11 +6,13 @@ import {
   Delete,
   Param,
   Body,
+  UseInterceptors,
 } from '@nestjs/common';
 import { MovieService } from './movies.service';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { HalInterceptor } from './hal.movie.interceptor';
 
 @Controller('movies')
 export class MovieController {
@@ -24,16 +26,19 @@ export class MovieController {
   }
 
   @Get(':id')
+  @UseInterceptors(HalInterceptor) // Applying the HAL interceptor to the controller
   async getMovieById(@Param('id') id: number): Promise<Movie> {
     return await this.movieService.getMovieById(id);
   }
 
   @Post()
+  @UseInterceptors(HalInterceptor) // Applying the HAL interceptor to the controller
   async createMovie(@Body() createMovieDto: CreateMovieDto): Promise<Movie> {
     return await this.movieService.createMovie(createMovieDto);
   }
 
   @Put(':id')
+  @UseInterceptors(HalInterceptor) // Applying the HAL interceptor to the controller
   async updateMovie(
     @Param('id') id: number,
     @Body() updateMovieDto: UpdateMovieDto,

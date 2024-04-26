@@ -6,13 +6,14 @@ import {
   Delete,
   Param,
   Body,
-  NotFoundException,
+  NotFoundException, UseInterceptors,
 } from '@nestjs/common';
 import { CategoryService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 import { Movie } from './entities/movie.entity';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import {HalCategoryInterceptor} from "./hal.category.interceptor";
 
 @Controller('categories')
 export class CategoryController {
@@ -26,6 +27,7 @@ export class CategoryController {
   }
 
   @Get(':id')
+  @UseInterceptors(HalCategoryInterceptor)
   async getCategoryById(@Param('id') id: number): Promise<Category> {
     const category = await this.categoryService.getCategoryById(id);
     if (!category) {
@@ -35,6 +37,7 @@ export class CategoryController {
   }
 
   @Post()
+  @UseInterceptors(HalCategoryInterceptor)
   async createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<Category> {
@@ -42,6 +45,7 @@ export class CategoryController {
   }
 
   @Put(':id')
+  @UseInterceptors(HalCategoryInterceptor)
   async updateCategory(
     @Param('id') id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -50,6 +54,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @UseInterceptors(HalCategoryInterceptor)
   async deleteCategory(@Param('id') id: number): Promise<void> {
     await this.categoryService.deleteCategory(id);
   }
