@@ -15,6 +15,9 @@ import { AppController } from './app.controller';
         limit: 10,
       },
     ]),
+    TypeOrmModule.forRoot({
+      ...config,
+    }),
     HttpModule,
     MoviesModule,
   ],
