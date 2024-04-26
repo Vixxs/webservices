@@ -1,12 +1,9 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AccountDto } from 'src/accounts/dto/register.dto';
 import { Repository } from 'typeorm';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { Role } from './enums/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -15,34 +12,31 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(uid: string, updateUserDto: AccountDto): Promise<User> {
     const user = await this.usersRepository.findOneBy({
-      id: id,
+      uid: uid,
     });
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    if (updateUserDto.email && user.email !== updateUserDto.email) {
-      const existingUser = await this.usersRepository.findOneBy({
-        email: updateUserDto.email,
-      });
-      if (existingUser) {
-        throw new BadRequestException('Email already exists');
-      }
+
+    if (!user.roles.includes(Role.ADMIN)) {
+      updateUserDto.roles = user.roles;
     }
-    await this.usersRepository.update(id, updateUserDto);
-    Object.assign(user, updateUserDto);
-    return user;
+
+    return this.usersRepository.save({
+      ...user,
+      ...updateUserDto,
+    });
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(uid: string): Promise<User> {
     const user = await this.usersRepository.findOneBy({
-      id: id,
+      uid: uid,
     });
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
     return user;
   }
 }

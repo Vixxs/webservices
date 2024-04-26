@@ -1,26 +1,37 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { IsEmail, MinLength } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Role } from '../enums/role.enum';
+import { Status } from '../enums/status.enum';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  uid: string;
 
-  @Column({ type: 'varchar', length: 200 })
-  firstName: string;
-
-  @Column({ type: 'varchar', length: 200 })
-  lastName: string;
-
-  @Column({ unique: true })
-  @IsEmail()
-  email: string;
+  @Column({ type: 'varchar', length: 200, unique: true })
+  login: string;
 
   @ApiHideProperty()
   @Exclude()
   @Column()
-  @MinLength(8)
   password: string;
+
+  @Column({ type: 'varchar', default: [Role.USER] })
+  roles: Role[];
+
+  @Column({ type: 'varchar', default: Status.OPEN })
+  status: Status;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthGuard } from './auth/auth.guard';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './accounts/auth.module';
+import { AuthGuard } from './accounts/guard/auth.guard';
 import { config } from './config/typeorm';
 import { UsersModule } from './users/users.module';
 
@@ -13,8 +13,8 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot(config),
     ThrottlerModule.forRoot([
       {
-        ttl: 60000,
-        limit: 10,
+        ttl: 1800000,
+        limit: 3,
       },
     ]),
     HttpModule,
