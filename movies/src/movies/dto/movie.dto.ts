@@ -3,7 +3,9 @@ import {
   IsOptional,
   IsInt,
   MaxLength,
-  IsDate,
+  IsDateString,
+  IsNumber,
+  IsArray,
 } from 'class-validator';
 
 export class CreateMovieDto {
@@ -15,8 +17,13 @@ export class CreateMovieDto {
   @MaxLength(2048)
   description: string;
 
-  @IsDate()
-  releaseDate: Date;
+  @IsDateString()
+  releaseDate: string; // Changed from IsDate to IsDateString
+
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @IsOptional()
+  categoryIds: number[]; // New field to add category IDs
 
   @IsInt()
   @IsOptional()

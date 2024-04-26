@@ -27,17 +27,7 @@ export class Movie {
   @Column({ nullable: true })
   posterUrl?: string;
 
-  @ManyToMany(() => Category, (category) => category.movies)
-  @JoinTable({
-    name: 'movie_category',
-    joinColumn: {
-      name: 'movie_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'category_id',
-      referencedColumnName: 'id',
-    },
-  })
+  @ManyToMany(() => Category)
+  @JoinTable()
   categories: Category[];
 }
