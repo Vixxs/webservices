@@ -8,10 +8,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
+import { AuthService } from './auth.service';
 import { Public } from './decorator/public';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { AuthService } from './movies.service';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)

@@ -3,9 +3,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { UsersModule } from '../users/users.module';
-import { jwtConstants } from './guard/constants';
-import { AuthController } from './movies.controller';
-import { AuthService } from './movies.service';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { jwtConstants } from './constants';
 
 @Module({
   imports: [
