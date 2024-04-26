@@ -42,4 +42,9 @@ export class MovieController {
   async deleteMovie(@Param('id') id: number): Promise<void> {
     return await this.movieService.deleteMovie(id);
   }
+
+  @Post('search/:title')
+  async searchMovie(@Param('title') title: string) {
+    return await this.movieService.searchMovie(title);
+  }
 }
