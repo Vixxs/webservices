@@ -8,23 +8,23 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_DB=${DATABASE_NAME}
-    container_name: postgres
+    container_name: postgreswebserv
     volumes:
       - /var/lib/postgresql/data
     ports:
       - '5432:5432'
 
-  auth:
-    build:
-      context: ./auth
-      dockerfile: Dockerfile
-    container_name: auth
-    ports:
-      - '3000:3000'
-    depends_on:
-      - db
-    volumes:
-      - ./src:/app/src
+#  auth:
+#    build:
+#      context: ./auth
+#      dockerfile: Dockerfile
+#    container_name: auth
+#    ports:
+#      - '3000:3000'
+#    depends_on:
+#      - db
+#    volumes:
+#      - ./src:/app/src
 
   movies:
     build:
@@ -32,9 +32,8 @@ services:
       dockerfile: Dockerfile
     container_name: movies
     ports:
-      - '3001:3001'
+      - '4354:4354'
     depends_on:
       - db
-      - auth
     volumes:
-      - ./src:/app/src
+      - ./movies/src:/app/src
