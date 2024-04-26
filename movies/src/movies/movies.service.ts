@@ -8,6 +8,7 @@ import { In, Repository } from 'typeorm';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
 import { Category } from './entities/category.entity';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Injectable()
 export class MovieService {
@@ -18,9 +19,11 @@ export class MovieService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  async getAllMovies(): Promise<Movie[]> {
-    return await this.movieRepository.find({
+  async getAllMovies(query: PaginateQuery): Promise<Paginated<Movie>> {
+    return await paginate(query, this.movieRepository, {
+      sortableColumns: ['id'],
       relations: ['categories'],
+      defaultLimit: 5,
     });
   }
 
