@@ -1,19 +1,20 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  NotFoundException,
+  Param,
   Post,
   Put,
-  Delete,
-  Param,
-  Body,
-  NotFoundException, UseInterceptors,
+  UseInterceptors,
 } from '@nestjs/common';
-import { CategoryService } from './categories.service';
-import { Category } from './entities/category.entity';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
-import { Movie } from './entities/movie.entity';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import {HalCategoryInterceptor} from "./hal.category.interceptor";
+import { CategoryService } from './categories.service';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
+import { Category } from './entities/category.entity';
+import { Movie } from './entities/movie.entity';
+import { HalCategoryInterceptor } from './interceptors/hal.category.interceptor';
 
 @Controller('categories')
 export class CategoryController {

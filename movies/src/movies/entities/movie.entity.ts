@@ -1,9 +1,9 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 
@@ -12,13 +12,13 @@ export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 128 })
+  @Column({ type: 'varchar', length: 128 })
   title: string;
 
-  @Column({ length: 2048 })
+  @Column({ type: 'varchar', length: 2048 })
   description: string;
 
-  @Column()
+  @Column({ type: 'date' })
   releaseDate: Date;
 
   @Column({ type: 'int', nullable: true })
@@ -28,6 +28,6 @@ export class Movie {
   posterUrl?: string;
 
   @ManyToMany(() => Category)
-  @JoinTable()
+  @JoinTable({ name: 'movie_category' })
   categories: Category[];
 }

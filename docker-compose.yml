@@ -26,14 +26,14 @@ services:
 #    volumes:
 #      - ./src:/app/src
 
-  movies:
-    build:
-      context: ./movies
-      dockerfile: Dockerfile
-    container_name: movies
-    ports:
-      - '4354:4354'
-    depends_on:
-      - db
-    volumes:
-      - ./movies/src:/app/src
+#  movies:
+#    build:
+#      context: ./movies
+#      dockerfile: Dockerfile
+#    container_name: movies
+#    ports:
+#      - '3001:3001'
+#    depends_on:
+#      - db
+#    volumes:
+#      - ./movies/src:/app/src

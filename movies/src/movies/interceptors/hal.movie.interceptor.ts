@@ -1,7 +1,7 @@
-import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { map } from 'rxjs/operators';
+import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Movie } from './entities/movie.entity';
+import { map } from 'rxjs/operators';
+import { Movie } from '../entities/movie.entity';
 
 export class HalInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

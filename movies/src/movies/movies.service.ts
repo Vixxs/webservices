@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { In, Repository } from 'typeorm';
-import { Movie } from './entities/movie.entity';
 import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
 import { Category } from './entities/category.entity';
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { Movie } from './entities/movie.entity';
 
 @Injectable()
 export class MovieService {
@@ -23,6 +23,7 @@ export class MovieService {
     return await paginate(query, this.movieRepository, {
       sortableColumns: ['id'],
       relations: ['categories'],
+      searchableColumns: ['title', 'description'],
       defaultLimit: 5,
     });
   }

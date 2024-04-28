@@ -1,18 +1,18 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
-  Delete,
-  Param,
-  Body,
   UseInterceptors,
 } from '@nestjs/common';
-import { MovieService } from './movies.service';
-import { Movie } from './entities/movie.entity';
-import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { HalInterceptor } from './hal.movie.interceptor';
+import { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto';
+import { Movie } from './entities/movie.entity';
+import { HalInterceptor } from './interceptors/hal.movie.interceptor';
+import { MovieService } from './movies.service';
 
 @Controller('movies')
 export class MovieController {
