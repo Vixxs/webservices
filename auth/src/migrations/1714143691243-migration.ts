@@ -12,6 +12,11 @@ export class Migration1714143691243 implements MigrationInterface {
     await queryRunner.query(
       `INSERT INTO "user" (login, password, roles, status, created_at, updated_at) VALUES ('admin', '${password}', '["ROLE_ADMIN"]', 'open', now(), now())`,
     );
+
+    const passwordUser = await bcrypt.hash('user', 10);
+    await queryRunner.query(
+      `INSERT INTO "user" (login, password, roles, status, created_at, updated_at) VALUES ('user', '${passwordUser}', '["ROLE_USER"]', 'open', now(), now())`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

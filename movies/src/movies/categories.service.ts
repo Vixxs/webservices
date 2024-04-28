@@ -1,10 +1,10 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
-import {Category} from './entities/category.entity';
-import {Movie} from './entities/movie.entity';
-import {CreateCategoryDto, UpdateCategoryDto} from './dto/category.dto';
-import {paginate, Paginated, PaginateQuery} from 'nestjs-paginate';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { Repository } from 'typeorm';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
+import { Category } from './entities/category.entity';
+import { Movie } from './entities/movie.entity';
 
 @Injectable()
 export class CategoryService {
@@ -18,11 +18,12 @@ export class CategoryService {
   async getAllCategories(query: PaginateQuery): Promise<Paginated<Category>> {
     return await paginate(query, this.categoryRepository, {
       sortableColumns: ['id'],
-      defaultLimit: 5,
+      searchableColumns: ['name'],
+      defaultLimit: 10,
     });
   }
 
-  async getCategoryById(id: number): Promise<Category> {
+  async getCategoryById(id: string): Promise<Category> {
     const category = await this.categoryRepository.findOne({
       where: { id },
     });
@@ -40,7 +41,7 @@ export class CategoryService {
   }
 
   async updateCategory(
-    id: number,
+    id: string,
     updateCategoryDto: UpdateCategoryDto,
   ): Promise<Category> {
     const category = await this.getCategoryById(id);
@@ -48,20 +49,25 @@ export class CategoryService {
     return await this.categoryRepository.save(category);
   }
 
-  async deleteCategory(id: number): Promise<void> {
+  async deleteCategory(id: string): Promise<void> {
     const result = await this.categoryRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
   }
 
-  async getMoviesByCategory(id: number): Promise<Movie[]> {
-    const category = await this.getCategoryById(id);
-    if (!category) {
-      throw new NotFoundException(`Category with ID ${id} not found`);
-    }
-      return await this.movieRepository.find({
-        where: {categories: category},
+  async getMoviesByCategory(
+    id: string,
+    query: PaginateQuery,
+  ): Promise<Paginated<Movie>> {
+    const queryBuilder = this.movieRepository
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.categories', 'category')
+      .where('category.id = :id', { id });
+
+    return await paginate(query, queryBuilder, {
+      sortableColumns: ['id'],
+      defaultLimit: 10,
     });
   }
 }

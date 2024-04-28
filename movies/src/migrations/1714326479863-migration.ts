@@ -1,17 +1,17 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migration1714318199273 implements MigrationInterface {
-  name = 'Migration1714318199273';
+export class Migration1714326479863 implements MigrationInterface {
+  name = 'Migration1714326479863';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "category" ("id" SERIAL NOT NULL, "name" character varying(64) NOT NULL, "description" character varying(256), CONSTRAINT "UQ_23c05c292c439d77b0de816b500" UNIQUE ("name"), CONSTRAINT "PK_9c4e4a89e3674fc9f382d733f03" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "category" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying(64) NOT NULL, "description" character varying(256), CONSTRAINT "UQ_23c05c292c439d77b0de816b500" UNIQUE ("name"), CONSTRAINT "PK_9c4e4a89e3674fc9f382d733f03" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "movie" ("id" SERIAL NOT NULL, "title" character varying(128) NOT NULL, "description" character varying(2048) NOT NULL, "release_date" date NOT NULL, "rating" integer, "poster_url" character varying, CONSTRAINT "PK_cb3bb4d61cf764dc035cbedd422" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "movie" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying(128) NOT NULL, "description" character varying(2048) NOT NULL, "release_date" date NOT NULL, "rating" integer, "poster_url" character varying, CONSTRAINT "PK_cb3bb4d61cf764dc035cbedd422" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "movie_category" ("movie_id" integer NOT NULL, "category_id" integer NOT NULL, CONSTRAINT "PK_863112691ec73f8eddee559d777" PRIMARY KEY ("movie_id", "category_id"))`,
+      `CREATE TABLE "movie_category" ("movie_id" uuid NOT NULL, "category_id" uuid NOT NULL, CONSTRAINT "PK_863112691ec73f8eddee559d777" PRIMARY KEY ("movie_id", "category_id"))`,
     );
     await queryRunner.query(
       `CREATE INDEX "IDX_772fbff485e9541a9b4d7fec88" ON "movie_category" ("movie_id") `,

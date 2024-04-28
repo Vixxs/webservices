@@ -20,14 +20,14 @@ export class MovieService {
   ) {}
 
   async getAllMovies(query: PaginateQuery): Promise<Paginated<Movie>> {
-    return await paginate(query, this.movieRepository, {
+    return await paginate<Movie>(query, this.movieRepository, {
       sortableColumns: ['id'],
       relations: ['categories'],
       searchableColumns: ['title', 'description'],
-      defaultLimit: 5,
+      defaultLimit: 10,
     });
-  }
-  async getMovieById(id: number): Promise<Movie> {
+  } 
+  async getMovieById(id: string): Promise<Movie> {
     const movie = await this.movieRepository.findOne({
       where: { id },
       relations: ['categories'],
@@ -62,7 +62,7 @@ export class MovieService {
   }
 
   async updateMovie(
-    id: number,
+    id: string,
     updateMovieDto: UpdateMovieDto,
   ): Promise<Movie> {
     const movie = await this.getMovieById(id);
@@ -91,7 +91,7 @@ export class MovieService {
     return await this.movieRepository.save(movie);
   }
 
-  async deleteMovie(id: number): Promise<void> {
+  async deleteMovie(id: string): Promise<void> {
     const movie = await this.getMovieById(id); // Check if the movie exists
     if (!movie) {
       throw new NotFoundException(`Movie with ID ${id} not found`);

@@ -1,11 +1,10 @@
 import {
-  IsString,
-  IsOptional,
-  IsInt,
-  MaxLength,
-  IsDateString,
-  IsNumber,
   IsArray,
+  IsDateString,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
 } from 'class-validator';
 
 export class CreateMovieDto {
@@ -21,9 +20,8 @@ export class CreateMovieDto {
   releaseDate: string; // Changed from IsDate to IsDateString
 
   @IsArray()
-  @IsNumber({}, { each: true })
   @IsOptional()
-  categoryIds: number[]; // New field to add category IDs
+  categoryIds: string[]; // New field to add category IDs
 
   @IsInt()
   @IsOptional()

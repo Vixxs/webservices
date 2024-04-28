@@ -26,7 +26,6 @@ export class HalCategoryInterceptor implements NestInterceptor {
         self: { href: `${baseUrl}/${category.id}` },
         update: { href: `${baseUrl}/${category.id}`, method: 'PUT' },
         delete: { href: `${baseUrl}/${category.id}`, method: 'DELETE' },
-        categories: { href: `${baseUrl}/${category.id}/categories` },
       },
     };
   }

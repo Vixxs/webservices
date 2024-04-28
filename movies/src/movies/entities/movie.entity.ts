@@ -9,8 +9,8 @@ import { Category } from './category.entity';
 
 @Entity()
 export class Movie {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 128 })
   title: string;
