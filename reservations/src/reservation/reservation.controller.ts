@@ -1,27 +1,30 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { ReservationService } from './reservation.service';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import { ReservationService } from './reservation.service';
 
-@Controller('movie/:movieUid/reservations')
+@Controller()
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
-  @Post()
-  create(@Param('movieUid') movieUid: string, @Body() createReservationDto: CreateReservationDto) {
+  @Post('movies/:movieUid/reservations')
+  create(
+    @Param('movieUid') movieUid: string,
+    @Body() createReservationDto: CreateReservationDto,
+  ) {
     return this.reservationService.create(movieUid, createReservationDto);
   }
 
-  @Post(':uid/confirm')
+  @Post('reservations/:uid/confirm')
   confirm(@Param('uid') uid: string) {
     return this.reservationService.confirm(uid);
   }
 
-  @Get()
+  @Get('movies/:movieUid/reservations')
   findAll(@Param('movieUid') movieUid: string) {
     return this.reservationService.findAll(movieUid);
   }
 
-  @Get(':uid')
+  @Get('reservations/:uid')
   findOne(@Param('uid') uid: string) {
     return this.reservationService.findOne(uid);
   }

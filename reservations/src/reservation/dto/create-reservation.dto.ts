@@ -1,5 +1,10 @@
+import { IsNumber, IsUUID } from 'class-validator';
+
 export class CreateReservationDto {
-    seance: string;
-    nbSeats: number;
-    room: string;
-  }
+  @IsUUID()
+  seance: string;
+  @IsNumber()
+  nbSeats: number;
+  @IsUUID()
+  room: string;
+}

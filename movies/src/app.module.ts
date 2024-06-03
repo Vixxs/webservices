@@ -8,9 +8,6 @@ import { MoviesModule } from './movies/movies.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(config),
-    TypeOrmModule.forRoot({
-      ...config,
-    }),
     HttpModule,
     MoviesModule,
     ConfigModule,

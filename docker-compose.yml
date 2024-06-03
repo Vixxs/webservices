@@ -21,14 +21,15 @@ services:
     depends_on:
       - db
 
-  # reservation-service:
-  #   build: ./reservation
-  #   ports:
-  #     - "3002:3002"
-  #   environment:
-  #     - NODE_ENV=development
-  #   depends_on:
-  #     - db
+  reservations:
+    container_name: reservations
+    build: ./reservations
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
 
   db:
     container_name: db

@@ -1,13 +1,18 @@
+# Use the official Node.js image as the base image
 FROM node:20
 
-WORKDIR /app
+# Create and change to the app directory
+WORKDIR /usr/src/app
 
+# Install app dependencies
 COPY package*.json ./
-
 RUN npm install
 
+# Copy the app source code
 COPY . .
 
-RUN npm run build
+# Expose the port the app runs on
+EXPOSE 3002
 
-CMD npm run start:dev
+# Start the app
+CMD npm run migration:run && npm run start:dev

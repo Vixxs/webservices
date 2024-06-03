@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Seance } from '../../seance/entities/seance.entity';
 
 @Entity()
@@ -15,7 +22,7 @@ export class Reservation {
   @Column()
   nbSeats: number;
 
-  @ManyToOne(() => Seance, seance => seance.reservations)
+  @ManyToOne(() => Seance, (seance) => seance.reservations)
   seance: Seance;
 
   @CreateDateColumn()

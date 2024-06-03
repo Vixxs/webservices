@@ -1,3 +1,3 @@
 export class CreateCinemaDto {
-    name: string;
-  }
+  name: string;
+}

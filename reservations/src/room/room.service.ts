@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Room } from './entities/room.entity';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { Room } from './entities/room.entity';
 
 @Injectable()
 export class RoomService {
@@ -16,17 +16,33 @@ export class RoomService {
     return this.roomRepository.find({ where: { cinema: { uid: cinemaUid } } });
   }
 
-  findOne(cinemaUid: string, uid: string): Promise<Room> {
-    return this.roomRepository.findOne({ where: { cinema: { uid: cinemaUid }, uid } });
+  async findOne(cinemaUid: string, uid: string): Promise<Room> {
+    const cinema = await this.roomRepository.findOne({
+      where: { cinema: { uid: cinemaUid }, uid },
+    });
+    if (!cinema) {
+      throw new NotFoundException(`Room #${uid} not found`);
+    }
+    return cinema;
   }
 
   create(cinemaUid: string, createRoomDto: CreateRoomDto): Promise<Room> {
-    const room = this.roomRepository.create({ ...createRoomDto, cinema: { uid: cinemaUid } });
+    const room = this.roomRepository.create({
+      ...createRoomDto,
+      cinema: { uid: cinemaUid },
+    });
     return this.roomRepository.save(room);
   }
 
-  async update(cinemaUid: string, uid: string, updateRoomDto: UpdateRoomDto): Promise<Room> {
-    await this.roomRepository.update(uid, { ...updateRoomDto, cinema: { uid: cinemaUid } });
+  async update(
+    cinemaUid: string,
+    uid: string,
+    updateRoomDto: UpdateRoomDto,
+  ): Promise<Room> {
+    await this.roomRepository.update(uid, {
+      ...updateRoomDto,
+      cinema: { uid: cinemaUid },
+    });
     return this.findOne(cinemaUid, uid);
   }
 

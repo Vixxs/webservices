@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Reservation } from './entities/reservation.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import { Reservation } from './entities/reservation.entity';
 
 @Injectable()
 export class ReservationService {
@@ -12,19 +12,29 @@ export class ReservationService {
   ) {}
 
   findAll(movieUid: string): Promise<Reservation[]> {
-    return this.reservationRepository.find({ where: { seance: { movie: movieUid } } });
+    return this.reservationRepository.find({
+      where: { seance: { movie: movieUid } },
+    });
   }
 
   async findOne(uid: string): Promise<Reservation> {
-    const reservation = await this.reservationRepository.findOne({where: { uid : uid }});
+    const reservation = await this.reservationRepository.findOne({
+      where: { uid: uid },
+    });
     if (!reservation) {
       throw new NotFoundException(`Reservation #${uid} not found`);
     }
     return reservation;
   }
 
-  create(movieUid: string, createReservationDto: CreateReservationDto): Promise<Reservation> {
-    const reservation = this.reservationRepository.create({ ...createReservationDto, seance: { movie: movieUid } });
+  create(
+    movieUid: string,
+    createReservationDto: CreateReservationDto,
+  ): Promise<Reservation> {
+    const reservation = this.reservationRepository.create({
+      ...createReservationDto,
+      seance: { movie: movieUid },
+    });
     return this.reservationRepository.save(reservation);
   }
 

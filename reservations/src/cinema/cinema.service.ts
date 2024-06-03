@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cinema } from './entities/cinema.entity';
 import { CreateCinemaDto } from './dto/create-cinema.dto';
 import { UpdateCinemaDto } from './dto/update-cinema.dto';
+import { Cinema } from './entities/cinema.entity';
 
 @Injectable()
 export class CinemaService {
@@ -16,8 +16,14 @@ export class CinemaService {
     return this.cinemaRepository.find();
   }
 
-  findOne(uid: string): Promise<Cinema> {
-    return this.cinemaRepository.findOne(uid);
+  async findOne(uid: string): Promise<Cinema> {
+    const cinema = await this.cinemaRepository.findOne({
+      where: { uid: uid },
+    });
+    if (!cinema) {
+      throw new NotFoundException(`Cinema #${uid} not found`);
+    }
+    return cinema;
   }
 
   create(createCinemaDto: CreateCinemaDto): Promise<Cinema> {
