@@ -17,18 +17,18 @@ export class CategoryService {
 
   async getAllCategories(query: PaginateQuery): Promise<Paginated<Category>> {
     return await paginate(query, this.categoryRepository, {
-      sortableColumns: ['id'],
+      sortableColumns: ['uid'],
       searchableColumns: ['name'],
       defaultLimit: 10,
     });
   }
 
-  async getCategoryById(id: string): Promise<Category> {
+  async getCategoryByUid(uid: string): Promise<Category> {
     const category = await this.categoryRepository.findOne({
-      where: { id },
+      where: { uid: uid },
     });
     if (!category) {
-      throw new NotFoundException(`Category with ID ${id} not found`);
+      throw new NotFoundException(`Category with UID ${uid} not found`);
     }
     return category;
   }
@@ -41,32 +41,32 @@ export class CategoryService {
   }
 
   async updateCategory(
-    id: string,
+    uid: string,
     updateCategoryDto: UpdateCategoryDto,
   ): Promise<Category> {
-    const category = await this.getCategoryById(id);
+    const category = await this.getCategoryByUid(uid);
     Object.assign(category, updateCategoryDto);
     return await this.categoryRepository.save(category);
   }
 
-  async deleteCategory(id: string): Promise<void> {
-    const result = await this.categoryRepository.delete(id);
+  async deleteCategory(uid: string): Promise<void> {
+    const result = await this.categoryRepository.delete(uid);
     if (result.affected === 0) {
-      throw new NotFoundException(`Category with ID ${id} not found`);
+      throw new NotFoundException(`Category with UID ${uid} not found`);
     }
   }
 
   async getMoviesByCategory(
-    id: string,
+    uid: string,
     query: PaginateQuery,
   ): Promise<Paginated<Movie>> {
     const queryBuilder = this.movieRepository
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.categories', 'category')
-      .where('category.id = :id', { id });
+      .where('category.uid = :uid', { uid: uid });
 
     return await paginate(query, queryBuilder, {
-      sortableColumns: ['id'],
+      sortableColumns: ['uid'],
       defaultLimit: 10,
     });
   }

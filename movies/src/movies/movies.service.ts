@@ -21,19 +21,19 @@ export class MovieService {
 
   async getAllMovies(query: PaginateQuery): Promise<Paginated<Movie>> {
     return await paginate<Movie>(query, this.movieRepository, {
-      sortableColumns: ['id'],
+      sortableColumns: ['uid'],
       relations: ['categories'],
-      searchableColumns: ['title', 'description'],
+      searchableColumns: ['name', 'description'],
       defaultLimit: 10,
     });
-  } 
-  async getMovieById(id: string): Promise<Movie> {
+  }
+  async getMovieByUid(uid: string): Promise<Movie> {
     const movie = await this.movieRepository.findOne({
-      where: { id },
+      where: { uid: uid },
       relations: ['categories'],
     });
     if (!movie) {
-      throw new NotFoundException(`Movie with ID ${id} not found`);
+      throw new NotFoundException(`Movie with UID ${uid} not found`);
     }
     return movie;
   }
@@ -43,11 +43,11 @@ export class MovieService {
 
     const categoryEntities = await this.categoryRepository.find({
       where: {
-        id: In(createMovieDto.categoryIds),
+        uid: In(createMovieDto.categoryUids),
       },
     });
 
-    if (categoryEntities.length !== createMovieDto.categoryIds.length) {
+    if (categoryEntities.length !== createMovieDto.categoryUids.length) {
       throw new BadRequestException('Some categories not found');
     }
 
@@ -62,18 +62,18 @@ export class MovieService {
   }
 
   async updateMovie(
-    id: string,
+    uid: string,
     updateMovieDto: UpdateMovieDto,
   ): Promise<Movie> {
-    const movie = await this.getMovieById(id);
+    const movie = await this.getMovieByUid(uid);
 
     // Check if there are category IDs to update
-    if (updateMovieDto.categoryIds && updateMovieDto.categoryIds.length > 0) {
+    if (updateMovieDto.categoryUids && updateMovieDto.categoryUids.length > 0) {
       const categoryEntities = await this.categoryRepository.find({
-        where: { id: In(updateMovieDto.categoryIds) },
+        where: { uid: In(updateMovieDto.categoryUids) },
       });
 
-      if (categoryEntities.length !== updateMovieDto.categoryIds.length) {
+      if (categoryEntities.length !== updateMovieDto.categoryUids.length) {
         throw new BadRequestException('Some categories not found');
       }
 
@@ -91,20 +91,20 @@ export class MovieService {
     return await this.movieRepository.save(movie);
   }
 
-  async deleteMovie(id: string): Promise<void> {
-    const movie = await this.getMovieById(id); // Check if the movie exists
+  async deleteMovie(uid: string): Promise<void> {
+    const movie = await this.getMovieByUid(uid); // Check if the movie exists
     if (!movie) {
-      throw new NotFoundException(`Movie with ID ${id} not found`);
+      throw new NotFoundException(`Movie with UID ${uid} not found`);
     }
 
-    await this.movieRepository.delete(id);
+    await this.movieRepository.delete(uid);
   }
 
-  async searchMovie(title: string) {
+  async searchMovie(name: string) {
     return await this.movieRepository
       .createQueryBuilder('movie')
-      .where('movie.title ILIKE :title', { title: `%${title}%` })
-      .orWhere('movie.description ILIKE :title', { title: `%${title}%` })
+      .where('movie.name ILIKE :name', { name: `%${name}%` })
+      .orWhere('movie.description ILIKE :name', { name: `%${name}%` })
       .getMany();
   }
 }

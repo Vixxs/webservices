@@ -1,11 +1,11 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { Status } from '../enums/status.enum';
@@ -26,12 +26,12 @@ export class User {
   @Column({ type: 'varchar', default: [Role.USER] })
   roles: Role[];
 
-  @Column({ type: 'varchar', default: Status.OPEN })
+  @Column({ type: 'varchar', default: Status.OPEN, enum: Status})
   status: Status;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

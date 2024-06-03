@@ -4,13 +4,15 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
+  Min,
 } from 'class-validator';
 
 export class CreateMovieDto {
   @IsString()
   @MaxLength(128)
-  title: string;
+  name: string;
 
   @IsString()
   @MaxLength(2048)
@@ -21,11 +23,17 @@ export class CreateMovieDto {
 
   @IsArray()
   @IsOptional()
-  categoryIds: string[]; // New field to add category IDs
+  categoryUids: string[]; // New field to add category IDs
 
   @IsInt()
-  @IsOptional()
-  rating?: number;
+  @Min(0)
+  @Max(5)
+  rate: number;
+
+  @IsInt()
+  @Min(0)
+  @Max(240)
+  duration: number;
 
   @IsString()
   @IsOptional()

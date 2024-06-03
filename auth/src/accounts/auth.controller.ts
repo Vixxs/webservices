@@ -1,17 +1,16 @@
 import {
-  Body,
-  ClassSerializerInterceptor,
-  Controller,
-  ForbiddenException,
-  Get,
-  Param,
-  Post,
-  Put,
-  Request,
-  UseInterceptors,
+    Body,
+    ClassSerializerInterceptor,
+    Controller,
+    ForbiddenException,
+    Get,
+    Param,
+    Post,
+    Put,
+    Request,
+    UseInterceptors,
 } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
-import { log } from 'console';
 import { Role } from 'src/users/enums/role.enum';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
@@ -37,13 +36,13 @@ export class AuthController {
 
   @Get('account/:uid')
   getAccount(@Param('uid') uid: string, @Request() req: any) {
-    const id = uid === 'me' ? req.user.id : uid;
-    if (req.user.id !== id && !req.user.roles.includes(Role.ADMIN)) {
+    const userUid = uid === 'me' ? req.user.uid : uid;
+    if (req.user.uid !== userUid && !req.user.roles.includes(Role.ADMIN)) {
       throw new ForbiddenException(
         "Il est nécessaire d'être administrateur ou d'être le proprétaire du compte",
       );
     }
-    return this.usersService.findOne(id);
+    return this.usersService.findOne(userUid);
   }
 
   @Put('account/:uid')
@@ -52,13 +51,13 @@ export class AuthController {
     @Body() accountDto: AccountDto,
     @Request() req: any,
   ) {
-    const id = uid === 'me' ? req.user.id : uid;
-    if (req.user.id !== id && !req.user.roles.includes(Role.ADMIN)) {
+    const userUid = uid === 'me' ? req.user.uid : uid;
+    if (req.user.uid !== userUid && !req.user.roles.includes(Role.ADMIN)) {
       throw new ForbiddenException(
         "Il est nécessaire d'être administrateur ou d'être le proprétaire du compte",
       );
     }
-    return this.usersService.update(id, accountDto);
+    return this.usersService.update(userUid, accountDto);
   }
 
   @Public()
@@ -70,7 +69,6 @@ export class AuthController {
   @Public()
   @Post('refresh-token/:refreshToken/token')
   refreshToken(@Param('refreshToken') refreshToken: string) {
-    log(refreshToken);
     return this.authService.refreshToken(refreshToken);
   }
 

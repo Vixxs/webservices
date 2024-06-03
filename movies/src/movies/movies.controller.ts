@@ -25,10 +25,10 @@ export class MovieController {
     return await this.movieService.getAllMovies(query);
   }
 
-  @Get(':id')
+  @Get(':uid')
   @UseInterceptors(HalInterceptor) // Applying the HAL interceptor to the controller
-  async getMovieById(@Param('id') id: string): Promise<Movie> {
-    return await this.movieService.getMovieById(id);
+  async getMovieById(@Param('uid') uid: string): Promise<Movie> {
+    return await this.movieService.getMovieByUid(uid);
   }
 
   @Post()
@@ -37,17 +37,17 @@ export class MovieController {
     return await this.movieService.createMovie(createMovieDto);
   }
 
-  @Put(':id')
+  @Put(':uid')
   @UseInterceptors(HalInterceptor) // Applying the HAL interceptor to the controller
   async updateMovie(
-    @Param('id') id: string,
+    @Param('uid') uid: string,
     @Body() updateMovieDto: UpdateMovieDto,
   ): Promise<Movie> {
-    return await this.movieService.updateMovie(id, updateMovieDto);
+    return await this.movieService.updateMovie(uid, updateMovieDto);
   }
 
-  @Delete(':id')
-  async deleteMovie(@Param('id') id: string): Promise<void> {
-    return await this.movieService.deleteMovie(id);
+  @Delete(':uid')
+  async deleteMovie(@Param('uid') uid: string): Promise<void> {
+    return await this.movieService.deleteMovie(uid);
   }
 }

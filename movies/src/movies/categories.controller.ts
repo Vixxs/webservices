@@ -27,12 +27,12 @@ export class CategoryController {
     return await this.categoryService.getAllCategories(query);
   }
 
-  @Get(':id')
+  @Get(':uid')
   @UseInterceptors(HalCategoryInterceptor)
-  async getCategoryById(@Param('id') id: string): Promise<Category> {
-    const category = await this.categoryService.getCategoryById(id);
+  async getCategoryByUid(@Param('uid') uid: string): Promise<Category> {
+    const category = await this.categoryService.getCategoryByUid(uid);
     if (!category) {
-      throw new NotFoundException(`Category with ID ${id} not found`);
+      throw new NotFoundException(`Category with UID ${uid} not found`);
     }
     return category;
   }
@@ -45,26 +45,26 @@ export class CategoryController {
     return await this.categoryService.createCategory(createCategoryDto);
   }
 
-  @Put(':id')
+  @Put(':uid')
   @UseInterceptors(HalCategoryInterceptor)
   async updateCategory(
-    @Param('id') id: string,
+    @Param('uid') uid: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ): Promise<Category> {
-    return await this.categoryService.updateCategory(id, updateCategoryDto);
+    return await this.categoryService.updateCategory(uid, updateCategoryDto);
   }
 
-  @Delete(':id')
+  @Delete(':uid')
   @UseInterceptors(HalCategoryInterceptor)
-  async deleteCategory(@Param('id') id: string): Promise<void> {
-    await this.categoryService.deleteCategory(id);
+  async deleteCategory(@Param('uid') uid: string): Promise<void> {
+    await this.categoryService.deleteCategory(uid);
   }
 
-  @Get(':id/movies')
+  @Get(':uid/movies')
   async getMoviesByCategory(
-    @Param('id') id: string,
+    @Param('uid') uid: string,
     @Paginate() query: PaginateQuery,
   ): Promise<Paginated<Movie>> {
-    return await this.categoryService.getMoviesByCategory(id, query);
+    return await this.categoryService.getMoviesByCategory(uid, query);
   }
 }

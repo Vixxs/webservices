@@ -23,9 +23,9 @@ export class HalInterceptor implements NestInterceptor {
     return {
       ...movie,
       _links: {
-        self: { href: `${baseUrl}/${movie.id}` },
-        update: { href: `${baseUrl}/${movie.id}`, method: 'PUT' },
-        delete: { href: `${baseUrl}/${movie.id}`, method: 'DELETE' },
+        self: { href: `${baseUrl}/${movie.uid}` },
+        update: { href: `${baseUrl}/${movie.uid}`, method: 'PUT' },
+        delete: { href: `${baseUrl}/${movie.uid}`, method: 'DELETE' },
       },
     };
   }

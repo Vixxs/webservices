@@ -1,7 +1,7 @@
 import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
+    BadRequestException,
+    Injectable,
+    NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -52,7 +52,7 @@ export class AuthService {
     }
 
     const accessToken = this.jwtService.sign({
-      id: user.uid,
+      uid: user.uid,
       email: user.login,
     });
     const newRefreshToken = this.jwtService.sign(
@@ -81,7 +81,7 @@ export class AuthService {
     const payload = this.jwtService.decode(refreshToken);
 
     const accessToken = this.jwtService.sign({
-      id: payload.uid,
+      uid: payload.uid,
       email: payload.login,
     });
     const newRefreshToken = this.jwtService.sign(
