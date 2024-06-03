@@ -1,39 +1,41 @@
-version: '3.5'
+version: '3'
 
 services:
+  auth:
+    container_name: auth
+    build: ./auth
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+
+  movies:
+    container_name: movies
+    build: ./movies
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+
+  # reservation-service:
+  #   build: ./reservation
+  #   ports:
+  #     - "3002:3002"
+  #   environment:
+  #     - NODE_ENV=development
+  #   depends_on:
+  #     - db
+
   db:
+    container_name: db
     image: postgres
-    restart: always
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_DB=${DATABASE_NAME}
-    container_name: db
-    volumes:
-      - /var/lib/postgresql/data
-    ports:
-      - '5432:5432'
-
-  auth:
-    build:
-      context: ./auth
-      dockerfile: Dockerfile
-    container_name: auth
-    ports:
-      - '3000:3000'
-    depends_on:
-      - db
-    volumes:
-      - ./auth/src:/app/src
-  
-  movies:
-    build:
-      context: ./movies
-      dockerfile: Dockerfile
-    container_name: movies
-    ports:
-      - '3001:3001'
-    depends_on:
-      - db
-    volumes:
-      - ./movies/src:/app/src
