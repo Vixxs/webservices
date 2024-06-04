@@ -30,10 +30,12 @@ export class ReservationService {
   create(
     movieUid: string,
     createReservationDto: CreateReservationDto,
+    userUid: string,
   ): Promise<Reservation> {
     const reservation = this.reservationRepository.create({
       ...createReservationDto,
       seance: { movie: movieUid },
+      userUid: userUid,
     });
     return this.reservationRepository.save(reservation);
   }

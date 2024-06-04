@@ -1,6 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { Room } from '../../room/entities/room.entity';
+import { IsUUID } from 'class-validator';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Reservation } from '../../reservation/entities/reservation.entity';
+import { Room } from '../../room/entities/room.entity';
 
 @Entity()
 export class Seance {
@@ -8,6 +17,7 @@ export class Seance {
   uid: string;
 
   @Column()
+  @IsUUID()
   movie: string;
 
   @Column()
@@ -16,7 +26,7 @@ export class Seance {
   @ManyToOne(() => Room, (room: Room) => room.seances)
   room: Room;
 
-  @OneToMany(() => Reservation, (reservation: Reservation) => reservation.seance)
+  @OneToMany(() => Reservation, (reservation) => reservation.seance)
   reservations: Reservation[];
 
   @CreateDateColumn()

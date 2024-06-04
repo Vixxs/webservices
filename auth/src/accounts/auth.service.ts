@@ -1,7 +1,7 @@
 import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
+  BadRequestException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -54,11 +54,13 @@ export class AuthService {
     const accessToken = this.jwtService.sign({
       uid: user.uid,
       email: user.login,
+      roles: user.roles,
     });
     const newRefreshToken = this.jwtService.sign(
       {
         uid: user.uid,
         login: user.login,
+        roles: user.roles,
       },
       {
         expiresIn: '120m',

@@ -10,6 +10,8 @@ services:
       - NODE_ENV=development
     depends_on:
       - db
+    volumes:
+      - ./auth:/usr/src/app
 
   movies:
     container_name: movies
@@ -20,6 +22,8 @@ services:
       - NODE_ENV=development
     depends_on:
       - db
+    volumes:
+      - ./movies:/usr/src/app
 
   reservations:
     container_name: reservations
@@ -30,6 +34,8 @@ services:
       - NODE_ENV=development
     depends_on:
       - db
+    volumes:
+      - ./reservations:/usr/src/app
 
   db:
     container_name: db

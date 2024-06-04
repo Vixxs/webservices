@@ -5,7 +5,6 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
     .setTitle('Webservice Reservations')
     .setDescription('The webservice reservations API description')
@@ -14,6 +13,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3001);
+  await app.listen(3002);
 }
 bootstrap();

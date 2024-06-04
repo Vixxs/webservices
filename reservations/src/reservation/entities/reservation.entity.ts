@@ -1,3 +1,4 @@
+import { IsUUID } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +13,10 @@ import { Seance } from '../../seance/entities/seance.entity';
 export class Reservation {
   @PrimaryGeneratedColumn('uuid')
   uid: string;
+
+  @Column()
+  @IsUUID()
+  userUid: string;
 
   @Column()
   rank: number;

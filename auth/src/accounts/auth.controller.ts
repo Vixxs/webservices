@@ -1,14 +1,14 @@
 import {
-    Body,
-    ClassSerializerInterceptor,
-    Controller,
-    ForbiddenException,
-    Get,
-    Param,
-    Post,
-    Put,
-    Request,
-    UseInterceptors,
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  Put,
+  Request,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Role } from 'src/users/enums/role.enum';
