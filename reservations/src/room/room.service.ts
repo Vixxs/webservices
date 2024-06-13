@@ -18,7 +18,7 @@ export class RoomService {
 
   async findOne(cinemaUid: string, uid: string): Promise<Room> {
     const cinema = await this.roomRepository.findOne({
-      where: { cinema: { uid: cinemaUid }, uid },
+      where: { cinema: { uid: cinemaUid }, uid: uid },
     });
     if (!cinema) {
       throw new NotFoundException(`Room #${uid} not found`);
@@ -47,6 +47,7 @@ export class RoomService {
   }
 
   async remove(cinemaUid: string, uid: string): Promise<void> {
-    await this.roomRepository.delete(uid);
+    const room = await this.findOne(cinemaUid, uid);
+    await this.roomRepository.delete(room);
   }
 }

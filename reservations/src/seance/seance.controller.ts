@@ -20,37 +20,50 @@ export class SeanceController {
   constructor(private readonly seanceService: SeanceService) {}
 
   @Get()
-  findAll(@Param('roomUid') roomUid: string) {
-    return this.seanceService.findAll(roomUid);
+  findAll(
+    @Param('roomUid') roomUid: string,
+    @Param('cinemaUid') cinemaUid: string,
+  ) {
+    return this.seanceService.findAll(roomUid, cinemaUid);
   }
 
   @Get(':uid')
-  findOne(@Param('roomUid') roomUid: string, @Param('uid') uid: string) {
-    return this.seanceService.findOne(roomUid, uid);
+  findOne(
+    @Param('roomUid') roomUid: string,
+    @Param('cinemaUid') cinemaUid: string,
+    @Param('uid') uid: string,
+  ) {
+    return this.seanceService.findOne(roomUid, cinemaUid, uid);
   }
 
   @Post()
   @Roles([Role.ADMIN])
   create(
     @Param('roomUid') roomUid: string,
+    @Param('cinemaUid') cinemaUid: string,
     @Body() createSeanceDto: CreateSeanceDto,
   ) {
-    return this.seanceService.create(roomUid, createSeanceDto);
+    return this.seanceService.create(roomUid, cinemaUid, createSeanceDto);
   }
 
   @Put(':uid')
   @Roles([Role.ADMIN])
   update(
     @Param('roomUid') roomUid: string,
+    @Param('cinemaUid') cinemaUid: string,
     @Param('uid') uid: string,
     @Body() updateSeanceDto: UpdateSeanceDto,
   ) {
-    return this.seanceService.update(roomUid, uid, updateSeanceDto);
+    return this.seanceService.update(roomUid, cinemaUid, uid, updateSeanceDto);
   }
 
   @Delete(':uid')
   @Roles([Role.ADMIN])
-  remove(@Param('roomUid') roomUid: string, @Param('uid') uid: string) {
-    return this.seanceService.remove(roomUid, uid);
+  remove(
+    @Param('roomUid') roomUid: string,
+    @Param('cinemaUid') cinemaUid: string,
+    @Param('uid') uid: string,
+  ) {
+    return this.seanceService.remove(roomUid, cinemaUid, uid);
   }
 }

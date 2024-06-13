@@ -22,6 +22,7 @@ services:
       - NODE_ENV=development
     depends_on:
       - db
+      - auth
     volumes:
       - ./movies:/usr/src/app
 
@@ -34,6 +35,8 @@ services:
       - NODE_ENV=development
     depends_on:
       - db
+      - auth
+      - movies
     volumes:
       - ./reservations:/usr/src/app
 
@@ -46,3 +49,16 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_DB=${DATABASE_NAME}
+  
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/data
+  
+volumes:
+  redis:
+    driver: local

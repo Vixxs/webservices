@@ -1,4 +1,5 @@
 import { IsUUID } from 'class-validator';
+import { Cinema } from 'src/cinema/entities/cinema.entity';
 import {
   Column,
   CreateDateColumn,
@@ -28,6 +29,9 @@ export class Seance {
 
   @OneToMany(() => Reservation, (reservation) => reservation.seance)
   reservations: Reservation[];
+
+  @ManyToOne(() => Cinema, (cinema: Cinema) => cinema.seances)
+  cinema: Cinema;
 
   @CreateDateColumn()
   createdAt: Date;

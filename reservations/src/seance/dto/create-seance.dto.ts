@@ -1,4 +1,4 @@
 export class CreateSeanceDto {
-    movie: string;
-    date: Date;
-  }
+  movie: string;
+  date: Date;
+}

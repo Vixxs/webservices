@@ -1,4 +1,4 @@
 export class CreateRoomDto {
-    seats: number;
-    name: string;
-  }
+  seats: number;
+  name: string;
+}

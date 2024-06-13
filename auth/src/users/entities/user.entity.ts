@@ -1,11 +1,11 @@
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { Status } from '../enums/status.enum';
@@ -18,6 +18,9 @@ export class User {
   @Column({ type: 'varchar', length: 200, unique: true })
   login: string;
 
+  @Column({ type: 'varchar', length: 200, unique: true })
+  email: string;
+
   @ApiHideProperty()
   @Exclude()
   @Column()
@@ -26,7 +29,7 @@ export class User {
   @Column({ type: 'varchar', default: [Role.USER] })
   roles: Role[];
 
-  @Column({ type: 'varchar', default: Status.OPEN, enum: Status})
+  @Column({ type: 'varchar', default: Status.OPEN, enum: Status })
   status: Status;
 
   @CreateDateColumn()

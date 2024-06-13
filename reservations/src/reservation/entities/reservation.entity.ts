@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Seance } from '../../seance/entities/seance.entity';
+import { Status } from '../enums/status.enum';
 
 @Entity()
 export class Reservation {
@@ -21,8 +22,8 @@ export class Reservation {
   @Column()
   rank: number;
 
-  @Column()
-  status: string;
+  @Column({ type: 'varchar', enum: Status, default: Status.PENDING })
+  private _status: Status;
 
   @Column()
   nbSeats: number;
@@ -38,4 +39,15 @@ export class Reservation {
 
   @Column({ nullable: true })
   expiresAt: Date;
+
+  get status(): Status {
+    if (this.expiresAt < new Date()) {
+      return Status.EXPIRED;
+    }
+    return this._status;
+  }
+
+  set status(status: Status) {
+    this._status = status;
+  }
 }
