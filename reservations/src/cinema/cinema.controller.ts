@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
+  Inject,
   Param,
   Post,
   Put,
@@ -18,7 +20,10 @@ import { UpdateCinemaDto } from './dto/update-cinema.dto';
 @Controller('cinema')
 @UseGuards(RolesGuard)
 export class CinemaController {
-  constructor(private readonly cinemaService: CinemaService) {}
+  constructor(
+    @Inject(forwardRef(() => CinemaService))
+    private readonly cinemaService: CinemaService,
+  ) {}
 
   @Get()
   findAll() {

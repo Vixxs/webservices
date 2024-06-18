@@ -1,15 +1,13 @@
-import { InjectQueue } from '@nestjs/bull';
 import {
-  Body,
-  Controller,
-  Get,
-  InternalServerErrorException,
-  Param,
-  Post,
-  Request,
-  UseGuards,
+    Body,
+    Controller,
+    Get,
+    InternalServerErrorException,
+    Param,
+    Post,
+    Request,
+    UseGuards,
 } from '@nestjs/common';
-import { Queue } from 'bull';
 import { Role } from '../decorator/role.enum';
 import { Roles } from '../decorator/roles.decorator';
 import { RolesGuard } from '../guard/roles.guard';
@@ -20,13 +18,9 @@ import { ReservationService } from './reservation.service';
 @Controller()
 @UseGuards(RolesGuard)
 export class ReservationController {
-  constructor(
-    private readonly reservationService: ReservationService,
-    @InjectQueue('reservation')
-    private reservationQueue: Queue,
-  ) {}
+  constructor(private readonly reservationService: ReservationService) {}
 
-  @Post('movies/:movieUid/reservations')
+  @Post('movie/:movieUid/reservations')
   async create(
     @Param('movieUid') movieUid: string,
     @Body() createReservationDto: CreateReservationDto,
@@ -42,10 +36,6 @@ export class ReservationController {
         'Error while creating reservation',
       );
     }
-
-    await this.reservationQueue.add('handleReservation', {
-      reservation,
-    });
 
     return {
       uid: reservation.uid,
@@ -63,7 +53,7 @@ export class ReservationController {
     return this.reservationService.confirm(uid, user);
   }
 
-  @Get('movies/:movieUid/reservations')
+  @Get('movie/:movieUid/reservations')
   @Roles([Role.ADMIN])
   findAll(@Param('movieUid') movieUid: string) {
     return this.reservationService.findAll(movieUid);

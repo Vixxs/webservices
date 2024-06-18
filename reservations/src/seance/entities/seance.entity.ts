@@ -1,5 +1,4 @@
 import { IsUUID } from 'class-validator';
-import { Cinema } from 'src/cinema/entities/cinema.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Cinema } from '../../cinema/entities/cinema.entity';
 import { Reservation } from '../../reservation/entities/reservation.entity';
 import { Room } from '../../room/entities/room.entity';
 

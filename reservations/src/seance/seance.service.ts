@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CinemaService } from 'src/cinema/cinema.service';
-import { RoomService } from 'src/room/room.service';
 import { Repository } from 'typeorm';
+import { CinemaService } from '../cinema/cinema.service';
+import { RoomService } from '../room/room.service';
 import { CreateSeanceDto } from './dto/create-seance.dto';
 import { UpdateSeanceDto } from './dto/update-seance.dto';
 import { Seance } from './entities/seance.entity';

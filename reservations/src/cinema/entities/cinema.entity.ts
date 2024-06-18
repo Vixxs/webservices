@@ -1,4 +1,3 @@
-import { Seance } from 'src/seance/entities/seance.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Room } from '../../room/entities/room.entity';
+import { Seance } from '../../seance/entities/seance.entity';
 
 @Entity()
 export class Cinema {

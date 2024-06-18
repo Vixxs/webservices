@@ -1,8 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SeanceService } from 'src/seance/seance.service';
 import { Repository } from 'typeorm';
+import { SeanceService } from '../seance/seance.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { Reservation } from './entities/reservation.entity';
 import { Status } from './enums/status.enum';
