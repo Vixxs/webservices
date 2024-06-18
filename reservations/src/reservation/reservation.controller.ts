@@ -1,12 +1,12 @@
 import {
-    Body,
-    Controller,
-    Get,
-    InternalServerErrorException,
-    Param,
-    Post,
-    Request,
-    UseGuards,
+  Body,
+  Controller,
+  Get,
+  InternalServerErrorException,
+  Param,
+  Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { Role } from '../decorator/role.enum';
 import { Roles } from '../decorator/roles.decorator';

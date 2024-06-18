@@ -8,6 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { RolesGuard } from 'src/guard/roles.guard';
 import { Role } from '../decorator/role.enum';
 import { Roles } from '../decorator/roles.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -15,7 +16,7 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { RoomService } from './room.service';
 
 @Controller('cinema/:cinemaUid/rooms')
-@UseGuards(Roles)
+@UseGuards(RolesGuard)
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 

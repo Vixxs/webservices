@@ -8,6 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { RolesGuard } from 'src/guard/roles.guard';
 import { Role } from '../decorator/role.enum';
 import { Roles } from '../decorator/roles.decorator';
 import { CreateSeanceDto } from './dto/create-seance.dto';
@@ -15,7 +16,7 @@ import { UpdateSeanceDto } from './dto/update-seance.dto';
 import { SeanceService } from './seance.service';
 
 @Controller('cinema/:cinemaUid/rooms/:roomUid/sceances')
-@UseGuards(Roles)
+@UseGuards(RolesGuard)
 export class SeanceController {
   constructor(private readonly seanceService: SeanceService) {}
 
