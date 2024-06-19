@@ -11,19 +11,9 @@ import { jwtConstants } from './guard/constants';
 import { ReservationModule } from './reservation/reservation.module';
 import { RoomModule } from './room/room.module';
 import { SeanceModule } from './seance/seance.module';
-import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
-    BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
-    }),
-    BullModule.registerQueue({
-      name: 'reservation',
-    }),
     TypeOrmModule.forRoot(config),
     CinemaModule,
     RoomModule,

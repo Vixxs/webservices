@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CinemaModule } from '../cinema/cinema.module';
@@ -8,12 +7,7 @@ import { SeanceController } from './seance.controller';
 import { SeanceService } from './seance.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Seance]),
-    CinemaModule,
-    RoomModule,
-    HttpModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Seance]), CinemaModule, RoomModule],
   providers: [SeanceService],
   controllers: [SeanceController],
   exports: [SeanceService],

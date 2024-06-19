@@ -2,6 +2,17 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Migration1718745403844 implements MigrationInterface {
   name = 'Migration1718745403844';
+  cinema = [
+    { name: 'Pathé' },
+    { name: 'Gaumont' },
+    { name: 'UGC' },
+    { name: 'Mega CGR' },
+    { name: 'Kinepolis' },
+    { name: 'Cinéville' },
+    { name: 'Cinéma CGR' },
+    { name: 'Cinéma UGC' },
+    { name: '3 Palmes' },
+  ];
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -28,6 +39,40 @@ export class Migration1718745403844 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "seance" ADD CONSTRAINT "FK_7883b7232accdb7326acef3634f" FOREIGN KEY ("cinema_uid") REFERENCES "cinema"("uid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
+    for (const cinema of this.cinema) {
+      // Insert cinema with 2 rooms
+      await queryRunner.query(
+        `INSERT INTO "cinema" ("name") VALUES ('${cinema.name}')`,
+      );
+      const cinemaRecord = await queryRunner.query(
+        `SELECT * FROM "cinema" WHERE "name" = '${cinema.name}'`,
+      );
+      const cinemaUid = cinemaRecord[0].uid;
+      await queryRunner.query(
+        `INSERT INTO "room" ("seats", "name", "cinema_uid") VALUES (100, 'Room 1', '${cinemaUid}')`,
+      );
+      await queryRunner.query(
+        `INSERT INTO "room" ("seats", "name", "cinema_uid") VALUES (80, 'Room 2', '${cinemaUid}')`,
+      );
+      // Insert seance for each room
+
+      const room1 = await queryRunner.query(
+        `SELECT * FROM "room" WHERE "name" = 'Room 1'`,
+      );
+      const room1Uid = room1[0].uid;
+      await queryRunner.query(
+        `INSERT INTO "seance" ("movie", "date", "room_uid", "cinema_uid") VALUES ('Matrix', '2022-01-01 20:00:00', '${room1Uid}', '${cinemaUid}')`,
+      );
+
+      const room2 = await queryRunner.query(
+        `SELECT * FROM "room" WHERE "name" = 'Room 2'`,
+      );
+      const room2Uid = room2[0].uid;
+
+      await queryRunner.query(
+        `INSERT INTO "seance" ("movie", "date", "room_uid", "cinema_uid") VALUES ('ToyStory', '2022-01-01 20:00:00', '${room2Uid}', '${cinemaUid}')`,
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

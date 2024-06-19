@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,7 +14,6 @@ export class SeanceService {
     private seanceRepository: Repository<Seance>,
     private cinemaService: CinemaService,
     private roomService: RoomService,
-    private httpService: HttpService,
   ) {}
 
   findAll(roomUid: string, cinemaUid: string): Promise<Seance[]> {
@@ -58,10 +56,8 @@ export class SeanceService {
   ): Promise<Seance> {
     const cinema = await this.cinemaService.findOne(cinemaUid);
     const room = await this.roomService.findOne(cinemaUid, roomUid);
-    const movie = await this.getMovieByUid(createSeanceDto.movie);
     const seance = this.seanceRepository.create({
       ...createSeanceDto,
-      movie: movie.uid,
       cinema: cinema,
       room: room,
     });
@@ -75,26 +71,14 @@ export class SeanceService {
     updateSeanceDto: UpdateSeanceDto,
   ): Promise<Seance> {
     const seance = await this.findOne(roomUid, cinemaUid, uid);
-    const movie = await this.getMovieByUid(updateSeanceDto.movie);
     return this.seanceRepository.save({
       ...seance,
       ...updateSeanceDto,
-      movie: movie.uid,
     });
   }
 
   async remove(roomUid: string, cinemaUid: string, uid: string): Promise<void> {
     const seance = await this.findOne(roomUid, cinemaUid, uid);
     await this.seanceRepository.remove(seance);
-  }
-
-  async getMovieByUid(movieUid: string) {
-    const response = await this.httpService
-      .get(`http://localhost:3001/movies/${movieUid}`)
-      .toPromise();
-    if (response === undefined) {
-      throw new NotFoundException(`Movie #${movieUid} not found`);
-    }
-    return response.data;
   }
 }

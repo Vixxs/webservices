@@ -33,13 +33,12 @@ export class ReservationService {
   }
 
   async create(
-    movieUid: string,
     createReservationDto: CreateReservationDto,
     userUid: string,
   ): Promise<Reservation> {
     const seance = await this.seanceService.findOneByUidAndRoom(
       createReservationDto.seance,
-      movieUid,
+      createReservationDto.room,
     );
 
     const reservations = await this.reservationRepository.find({

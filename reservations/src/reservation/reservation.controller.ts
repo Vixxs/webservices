@@ -1,3 +1,4 @@
+import { InjectQueue } from '@nestjs/bull';
 import {
   Body,
   Controller,
@@ -8,6 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { Queue } from 'bull';
 import { Role } from '../decorator/role.enum';
 import { Roles } from '../decorator/roles.decorator';
 import { RolesGuard } from '../guard/roles.guard';
@@ -18,7 +20,11 @@ import { ReservationService } from './reservation.service';
 @Controller()
 @UseGuards(RolesGuard)
 export class ReservationController {
-  constructor(private readonly reservationService: ReservationService) {}
+  constructor(
+    @InjectQueue('reservation')
+    private reservationsQueue: Queue,
+    private readonly reservationService: ReservationService,
+  ) {}
 
   @Post('movie/:movieUid/reservations')
   async create(
@@ -27,7 +33,6 @@ export class ReservationController {
     @Request() req: any,
   ): Promise<OutputReservationDto> {
     const reservation = await this.reservationService.create(
-      movieUid,
       createReservationDto,
       req.user.uid,
     );
@@ -36,7 +41,9 @@ export class ReservationController {
         'Error while creating reservation',
       );
     }
-
+    console.log('Adding reservation to queue');
+    await this.reservationsQueue.add(reservation);
+    console.log('Reservation added to queue');
     return {
       uid: reservation.uid,
       rank: reservation.rank,

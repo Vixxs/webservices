@@ -26,6 +26,7 @@
     "schema:drop": "npm run typeorm -- schema:drop"
   },
   "dependencies": {
+    "@bull-board/nestjs": "^5.20.2",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/bull": "^10.1.1",

@@ -1,5 +1,6 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
+import { log } from 'console';
 import { Reservation } from './entities/reservation.entity';
 import { Status } from './enums/status.enum';
 import { ReservationService } from './reservation.service';
@@ -8,10 +9,10 @@ import { ReservationService } from './reservation.service';
 export class ReservationConsumer {
   constructor(private reservationService: ReservationService) {}
 
-  @Process('handleReservation')
-  async handleReservation(job: Job<Reservation>) {
+  @Process()
+  async process(job: Job<Reservation>) {
     const reservation = job.data;
-
+    log(`Processing reservation ${reservation.uid}`);
     // Update the reservation status
     await this.reservationService.updateStatus(reservation.uid, Status.OPEN); // replace 'newStatus' with the actual status
 

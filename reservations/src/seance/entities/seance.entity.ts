@@ -1,4 +1,3 @@
-import { IsUUID } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -18,7 +17,6 @@ export class Seance {
   uid: string;
 
   @Column()
-  @IsUUID()
   movie: string;
 
   @Column()
