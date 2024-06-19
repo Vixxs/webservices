@@ -19,7 +19,7 @@ Une fois que le projet est lancé, vous pouvez tester l'API en utilisant un outi
 
 Voici un exemple de requête que vous pouvez faire :
 ```bash
-curl -X GET http://localhost:3001/api/movies
+curl -X GET http://localhost:3001/movies
 ```
 
 ## Documentation de l'API
@@ -29,4 +29,7 @@ Auth service : http://localhost:3000/api
 ```
 ```bash
 Movie service : http://localhost:3001/api
+```
+```bash
+Réservation service : http://localhost:3002/api
 ```
