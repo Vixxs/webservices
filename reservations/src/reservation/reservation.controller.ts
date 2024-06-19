@@ -41,9 +41,7 @@ export class ReservationController {
         'Error while creating reservation',
       );
     }
-    console.log('Adding reservation to queue');
     await this.reservationsQueue.add(reservation);
-    console.log('Reservation added to queue');
     return {
       uid: reservation.uid,
       rank: reservation.rank,
